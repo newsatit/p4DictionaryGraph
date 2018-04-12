@@ -40,7 +40,7 @@ public class GraphProcessor {
     /**
      * Graph which stores the dictionary words and their associated connections
      */
-    private GraphADT<String> graph;
+    
 
     /**
      * Constructor for this class. Initializes instances variables to set the starting state of the object
@@ -64,8 +64,13 @@ public class GraphProcessor {
      * @return Integer the number of vertices (words) added
      */
     public Integer populateGraph(String filepath) {
-        return 0;
-    
+    		try {
+    			Stream<String> wordStream = WordProcessor.getWordStream(filepath); 
+    			
+    		} catch (IOException e) {
+    			
+    			return 0;
+    		}
     }
 
     
@@ -118,6 +123,6 @@ public class GraphProcessor {
      * Any shortest path algorithm can be used (Djikstra's or Floyd-Warshall recommended).
      */
     public void shortestPathPrecomputation() {
-    
+    		
     }
 }
