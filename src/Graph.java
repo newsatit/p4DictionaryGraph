@@ -13,32 +13,6 @@ import java.util.Set;
  */
 public class Graph<E> implements GraphADT<E> {
 
-    class GraphNode<E>{
-        private E data;
-        private ArrayList<GraphNode<E>> adjacencyList;
-
-        private GraphNode(E data){
-            this.data = data;
-        }
-
-        private E getData(){
-            return data;
-        }
-
-        private void setData(E data){
-            this.data = data;
-        }
-
-        private ArrayList<GraphNode<E>> getAdjacencyList (){
-            return adjacencyList;
-        }
-
-        private void addVertex(E newData){
-            adjacencyList.add(new GraphNode<E>(newData));
-        }
-
-    }
-
     /**
      * Instance variables and constructors
      */
