@@ -31,14 +31,16 @@ public class Graph<E> implements GraphADT<E> {
      */
     @Override
     public E addVertex(E vertex) {
-        if(vertex.equals(null))
+        if(vertex == null)
             return null;
         if(isInGraph(vertex))
             return null;
 
         vertices.add(vertex);
         matrix.add(new ArrayList<Boolean>());
-        matrix.get(matrix.size()-1).add(new Boolean(false));
+        for(int i = 0; i<matrix.size();i++){
+            matrix.get(i).add(new Boolean(false));
+        }
 
         return vertex;
     }
@@ -50,6 +52,19 @@ public class Graph<E> implements GraphADT<E> {
      */
     @Override
     public E removeVertex(E vertex) {
+        if(vertex == null)
+            return null;
+
+        int index = vertices.indexOf(vertex);
+
+        if(index == -1)
+            return null;
+
+        vertices.remove(index);
+        matrix.get(index).remove(index);
+        matrix.remove(index);
+
+        return vertex;
 
     }
 
@@ -58,7 +73,7 @@ public class Graph<E> implements GraphADT<E> {
      */
     @Override
     public boolean addEdge(E vertex1, E vertex2) {
-        if(vertex1.equals(null) || vertex2.equals(null))
+        if(vertex1 == null || vertex2 == null)
             return false;
         if(vertex1.equals(vertex2))
             return false;
@@ -72,6 +87,7 @@ public class Graph<E> implements GraphADT<E> {
         matrix.get(index1).set(index2, true);
         matrix.get(index2).set(index1, true);
 
+        return true;
 
     }
 
@@ -80,7 +96,21 @@ public class Graph<E> implements GraphADT<E> {
      */
     @Override
     public boolean removeEdge(E vertex1, E vertex2) {
+        if(vertex1 == null || vertex2==null)
+            return false;
+        if(vertex1.equals(vertex2))
+            return false;
 
+        int index1 = vertices.indexOf(vertex1);
+        int index2 = vertices.indexOf(vertex2);
+
+        if(index1 == -1 || index2 == -1)
+            return false;
+
+        matrix.get(index1).set(index2, false);
+        matrix.get(index2).set(index1, false);
+
+        return true;
     }
 
     /**
@@ -88,6 +118,18 @@ public class Graph<E> implements GraphADT<E> {
      */
     @Override
     public boolean isAdjacent(E vertex1, E vertex2) {
+        if(vertex1 == null || vertex2 == null)
+            return false;
+        if(vertex1.equals(vertex2))
+            return false;
+
+        int index1 = vertices.indexOf(vertex1);
+        int index2 = vertices.indexOf(vertex2);
+
+        if(index1 == -1 || index2 == -1)
+            return false;
+
+        return matrix.get(index1).get(index2);
 
     }
 
@@ -96,6 +138,23 @@ public class Graph<E> implements GraphADT<E> {
      */
     @Override
     public Iterable<E> getNeighbors(E vertex) {
+        if(vertex == null)
+            return null;
+
+        int index = vertices.indexOf(vertex);
+
+        if(index == -1)
+            return null;
+
+        ArrayList<E> neighbors = new ArrayList<E>();
+
+        for(int i=0; i<matrix.get(index).size(); i++){
+            if(matrix.get(index).get(i)) {
+                neighbors.add(vertices.get(i));
+            }
+        }
+
+        return neighbors;
 
     }
 
@@ -104,7 +163,7 @@ public class Graph<E> implements GraphADT<E> {
      */
     @Override
     public Iterable<E> getAllVertices() {
-
+        return vertices;
     }
 
     private boolean isInGraph(E vertex) {
