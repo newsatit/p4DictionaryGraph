@@ -13,9 +13,11 @@ import java.util.Set;
  */
 public class Graph<E> implements GraphADT<E> {
 
+    private ArrayList<GraphNode<E>> nodes;
+
     class GraphNode<E>{
         private E data;
-        private ArrayList<GraphNode<E>> adjacencyList;
+        private ArrayList<GraphNode<E>> edges;
 
         private GraphNode(E data){
             this.data = data;
@@ -29,14 +31,19 @@ public class Graph<E> implements GraphADT<E> {
             this.data = data;
         }
 
-        private ArrayList<GraphNode<E>> getAdjacencyList (){
-            return adjacencyList;
+        private ArrayList<GraphNode<E>> getEdges (){
+            return edges;
         }
 
         private void addVertex(E newData){
-            adjacencyList.add(new GraphNode<E>(newData));
+            edges.add(new GraphNode<E>(newData));
         }
 
+    }
+
+
+    public Graph(){
+        nodes = new ArrayList<GraphNode<E>>();
     }
 
     /**
@@ -48,7 +55,15 @@ public class Graph<E> implements GraphADT<E> {
      */
     @Override
     public E addVertex(E vertex) {
-        
+        if(vertex.equals(null))
+            return null;
+
+        if(isInGraph(vertex))
+           return null;
+
+        nodes.add(new GraphNode<E>(vertex));
+        return vertex;
+
     }
 
     /**
@@ -64,7 +79,14 @@ public class Graph<E> implements GraphADT<E> {
      */
     @Override
     public boolean addEdge(E vertex1, E vertex2) {
-        
+        if(vertex1.equals(null) || vertex2.equals(null))
+            return false;
+        if(vertex1.equals(vertex2))
+            return false;
+        if(!isInGraph(vertex1) || !isInGraph(vertex2))
+            return false;
+
+
     }    
 
     /**
@@ -97,6 +119,14 @@ public class Graph<E> implements GraphADT<E> {
     @Override
     public Iterable<E> getAllVertices() {
         
+    }
+
+    private boolean isInGraph(E vertex){
+        for(int i = 0; i < nodes.size(); i++){
+            if(nodes.get(i).data.equals(vertex))
+                return true;
+        }
+        return false;
     }
 
 }
