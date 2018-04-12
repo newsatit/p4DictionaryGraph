@@ -89,11 +89,64 @@ public class WordProcessor {
 	 * @return true if word1 and word2 are adjacent else false
 	 */
 	public static boolean isAdjacent(String word1, String word2) {
-		if (word1.equals(word2))	// return false if the words are the same
+		if (word1.equals(word2))    // return false if the words are the same
+		    return false;
+
+		int numberOfDifferences = 0; //number of letters that are not the same
+		int length1 = word1.length();
+		int length2 = word2.length();   // more than 1 char addition/deletion
+		int difference = length1 - length2;
+
+		//if word1 is 1 character length longer than word2
+		if (difference==1) {
+		    String word1Copy;
+		    for(int i=0; i<length1; i++) {
+			if (i==0) {
+			    word1Copy = word1.substring(i+1);
+			} else {
+			word1Copy = word1.substring(i-1,i) + word1.substring(i+1);
+			}
+			if(word2.equals(word1Copy)) {
+			    return true;
+			}
+		    }
+		    return false;
+		}
+
+
+		//if word2 is 1 character length longer than word1
+		if (difference==-1) {
+		    String word2Copy;
+		    for(int i=0; i<length2; i++) {
+			if (i==0) {
+			    word2Copy = word2.substring(i+1);
+			} else {
+			word2Copy = word2.substring(i-1,i) + word2.substring(i+1);
+			}
+			if(word1.equals(word2Copy)) {
+			    return true;
+			}
+		    }
+		    return false;
+		}
+
+
+		//for when there is a char replacement and words are the same length
+		if (difference==0) {
+		    for (int i=0; i<length1; i++) {
+			String sub1 = word1.substring(i, i+1);
+			String sub2 = word2.substring(i, i+1);
+			if (!sub1.equals(sub2))
+			    numberOfDifferences++;
+		    }
+		    if (numberOfDifferences > 1)
 			return false;
-		
-		
+		    else {
+			return true;
+		    }
+		}
 		return false;
+		
 	}
 	
 }
