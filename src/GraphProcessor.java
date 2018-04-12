@@ -37,6 +37,20 @@ import java.util.stream.Stream;
  */
 public class GraphProcessor {
 
+
+    private class Word{
+        private String word;
+        private ArrayList<ArrayList<String>> paths;
+        private ArrayList<Integer> distance;
+
+        Word(String word){
+            this.word = word;
+            this.paths = new ArrayList<ArrayList<String>>();
+            this.distance = new ArrayList<Integer>();
+        }
+    }
+
+    ArrayList<Word> words;
     /**
      * Graph which stores the dictionary words and their associated connections
      */
@@ -47,6 +61,7 @@ public class GraphProcessor {
      */
     public GraphProcessor() {
         this.graph = new Graph<>();
+        this.words = new ArrayList<Word>();
     }
         
     /**
@@ -118,6 +133,6 @@ public class GraphProcessor {
      * Any shortest path algorithm can be used (Djikstra's or Floyd-Warshall recommended).
      */
     public void shortestPathPrecomputation() {
-    
+
     }
 }
