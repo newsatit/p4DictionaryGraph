@@ -89,7 +89,11 @@ public class WordProcessor {
 	 * @return true if word1 and word2 are adjacent else false
 	 */
 	public static boolean isAdjacent(String word1, String word2) {
-		return false;	
+		if (word1.equals(word2))	// return false if the words are the same
+			return false;
+		
+		
+		return false;
 	}
 	
 }
