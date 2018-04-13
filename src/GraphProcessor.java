@@ -126,8 +126,10 @@ public class GraphProcessor {
      * @return List<String> list of the words
      */
     public List<String> getShortestPath(String word1, String word2) {
-        return null;
-    
+        int index1 = getWordIndex(word1);
+        int index2 = getWordIndex(word2);
+        
+        return (words.get(index1)).paths.get(index2);
     }
     
     /**
@@ -148,7 +150,10 @@ public class GraphProcessor {
      * @return Integer distance
      */
     public Integer getShortestDistance(String word1, String word2) {
-        return null;
+        int index1 = getWordIndex(word1);
+        int index2 = getWordIndex(word2); 
+        
+        return words.get(index1).distance.get(index2);
     }
     
     /**
