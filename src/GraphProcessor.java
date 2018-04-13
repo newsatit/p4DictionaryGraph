@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -92,13 +93,16 @@ public class GraphProcessor {
     			return 0;
     		}
 
-    		ArrayList<String> s = new ArrayList<String>();
 
     		// get rid of duplicates
     		wordStream = wordStream.distinct();
+            List<String> s = wordStream.collect(Collectors.toList());
     		// add each word to graph
-    		wordStream.forEach(x -> graph.addVertex(x));
-    		wordStream.forEach(x -> s.add(x));
+    		//wordStream.forEach(x -> graph.addVertex(x));
+
+
+            for(int i =0; i<s.size();i++)
+                graph.addVertex(s.get(i));
 
     		// add edges where necessary
     		for(int i = 0; i < s.size(); i++){
