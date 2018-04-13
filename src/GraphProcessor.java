@@ -39,10 +39,13 @@ import java.util.stream.Stream;
 public class GraphProcessor {
 
 
+    /*
+     *  This class is used to store information associated with the words in the graph
+     */
     private class Word{
-        private String str;
-        private ArrayList<ArrayList<String>> paths;
-        private ArrayList<Integer> distance;
+        private String str;    //stores the String of the word
+        private ArrayList<ArrayList<String>> paths; //stores the shortest paths to all the other vertices
+        private ArrayList<Integer> distance;    //keeps track of the length of the shortest paths to other words
 
         Word(String str){
             this.str = str;
@@ -50,12 +53,12 @@ public class GraphProcessor {
             this.distance = new ArrayList<Integer>();
         }
     }
-    GraphADT<String> graph;
-    ArrayList<Word> words;
+    ArrayList<Word> words; //Strings in the graph are used to instantiate word objects and are stored here
+
     /**
      * Graph which stores the dictionary words and their associated connections
      */
-    
+    private GraphADT<String> graph;
 
     /**
      * Constructor for this class. Initializes instances variables to set the starting state of the object
@@ -80,13 +83,32 @@ public class GraphProcessor {
      * @return Integer the number of vertices (words) added
      */
     public Integer populateGraph(String filepath) {
+        Stream<String> wordStream;
     		try {
-    			Stream<String> wordStream = WordProcessor.getWordStream(filepath); 
+    			wordStream = WordProcessor.getWordStream(filepath);
     			
     		} catch (IOException e) {
-    			
+    		    e.printStackTrace();
     			return 0;
     		}
+
+    		ArrayList<String> s = new ArrayList<String>();
+
+    		// get rid of duplicates
+    		wordStream = wordStream.distinct();
+    		// add each word to graph
+    		wordStream.forEach(x -> graph.addVertex(x));
+    		wordStream.forEach(x -> s.add(x));
+
+    		// add edges where necessary
+    		for(int i = 0; i < s.size(); i++){
+    		    for(int j =i; j<s.size(); j++){
+    		        if(WordProcessor.isAdjacent(s.get(i), s.get(j)))
+    		            graph.addEdge(s.get(i),s.get(j));
+                }
+            }
+
+            return s.size();
     }
 
     
@@ -108,8 +130,10 @@ public class GraphProcessor {
      * @return List<String> list of the words
      */
     public List<String> getShortestPath(String word1, String word2) {
-        return null;
-    
+        int index1 = getWordIndex(word1);
+        int index2 = getWordIndex(word2);
+        
+        return (words.get(index1)).paths.get(index2);
     }
     
     /**
@@ -130,7 +154,10 @@ public class GraphProcessor {
      * @return Integer distance
      */
     public Integer getShortestDistance(String word1, String word2) {
-        return null;
+        int index1 = getWordIndex(word1);
+        int index2 = getWordIndex(word2); 
+        
+        return words.get(index1).distance.get(index2);
     }
     
     /**
