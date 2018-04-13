@@ -39,7 +39,6 @@ import java.util.stream.Stream;
  */
 public class GraphProcessor {
 
-
     /*
      *  This class is used to store information associated with the words in the graph
      */
@@ -170,8 +169,7 @@ public class GraphProcessor {
      * Any shortest path algorithm can be used (Djikstra's or Floyd-Warshall recommended).
      */
     public void shortestPathPrecomputation() {
-    		
-    		// intialize words
+    		// Initialize words
     		Iterable<String> vertices = graph.getAllVertices();
     		words = new ArrayList<Word>();
     		for(String str : vertices) {
@@ -184,35 +182,38 @@ public class GraphProcessor {
     			Word word = words.get(i);
     			
     			// initialize word
-    			for(int j = 0; j < word.distance.size(); j++) {
-    				word.paths.add(new ArrayList<String>());
-    				word.distance.add(-1);
-    				visited[i] = false;
+    			ArrayList<ArrayList<String>> paths = new ArrayList<ArrayList<String>>();
+    			ArrayList<Integer> distance = new ArrayList<Integer>();
+    			String str = word.str;
+    			for(int j = 0; j < words.size(); j++) {
+    				paths.add(new ArrayList<String>());
+    				distance.add(-1);
+    				visited[j] = false;
     			}
     			Queue<Integer> q = new LinkedList<Integer>();
     			// Add the source vertex
     			q.add(i);
     			visited[i] = true;
-    			word.distance.set(i, 0);
+    			distance.set(i, 0);
     			ArrayList<String> startingPath = new ArrayList<String>();
-    			startingPath.add(word.str);
-    			word.paths.set(i, startingPath);
+    			startingPath.add(str);
+    			paths.set(i, startingPath);
     			
     			while(!q.isEmpty()) {
     				int curIndex = q.poll();
     				String curStr = words.get(curIndex).str;
-    				ArrayList<String> curPaths = word.paths.get(curIndex);
-    				Integer curDis = word.distance.get(curIndex);
+    				ArrayList<String> curPaths = paths.get(curIndex);
+    				Integer curDis = distance.get(curIndex);
     				Iterable<String> neighbors = graph.getNeighbors(curStr);
     				
-    				for(String neiStr : neighbors) {
-    					int neiIndex = getWordIndex(neiStr);
-    					if(!visited[neiIndex]) {
-    						word.distance.set(neiIndex, curDis + 1);
-    						ArrayList<String> neiPaths = new ArrayList<String>(curPaths);
-    						neiPaths.add(words.get(neiIndex).str);
-    						word.paths.set(neiIndex, neiPaths);
-    						visited[neiIndex] = true;
+    				for(String adjStr : neighbors) {
+    					int adjIndex = getWordIndex(adjStr);
+    					if(!visited[adjIndex]) {
+    						distance.set(adjIndex, curDis + 1);
+    						ArrayList<String> adjPaths = new ArrayList<String>(curPaths);
+    						adjPaths.add(words.get(adjIndex).str);
+    						paths.set(adjIndex, adjPaths);
+    						visited[adjIndex] = true;
     					}
     				}
     				
@@ -220,13 +221,15 @@ public class GraphProcessor {
     			
     			// resetting the base case
     			for(int j = 0; j < words.size(); j++) {
-    				ArrayList<String> paths = word.paths.get(j);
-    				if(paths.size() == 1) {
-    					word.paths.set(j, new ArrayList<String>());
-    				} else if(paths.size() == 0) {
-    					word.paths.set(j, null);
+    				ArrayList<String> newPath = paths.get(j);
+    				if(newPath.size() == 1) {
+    					paths.set(j, new ArrayList<String>());
+    				} else if(newPath.size() == 0) {
+    					paths.set(j, null);
     				}
     			}
+    			word.paths = paths;
+    			word.distance = distance;
     			words.set(i, word);
     		}
     }
@@ -239,4 +242,6 @@ public class GraphProcessor {
     		}
     		return -1;
     }
+    
+
 }
