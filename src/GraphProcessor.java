@@ -90,10 +90,13 @@ public class GraphProcessor {
 
     		ArrayList<String> s = new ArrayList<String>();
 
+    		// get rid of duplicates
     		wordStream = wordStream.distinct();
+    		// add each word to graph
     		wordStream.forEach(x -> graph.addVertex(x));
     		wordStream.forEach(x -> s.add(x));
 
+    		// add edges where necessary
     		for(int i = 0; i < s.size(); i++){
     		    for(int j =i; j<s.size(); j++){
     		        if(WordProcessor.isAdjacent(s.get(i), s.get(j)))
