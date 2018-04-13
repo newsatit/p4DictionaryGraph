@@ -4,6 +4,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -39,17 +40,17 @@ public class GraphProcessor {
 
 
     private class Word{
-        private String word;
+        private String str;
         private ArrayList<ArrayList<String>> paths;
         private ArrayList<Integer> distance;
 
-        Word(String word){
-            this.word = word;
+        Word(String str){
+            this.str = str;
             this.paths = new ArrayList<ArrayList<String>>();
             this.distance = new ArrayList<Integer>();
         }
     }
-
+    GraphADT<String> graph;
     ArrayList<Word> words;
     /**
      * Graph which stores the dictionary words and their associated connections
@@ -138,6 +139,73 @@ public class GraphProcessor {
      * Any shortest path algorithm can be used (Djikstra's or Floyd-Warshall recommended).
      */
     public void shortestPathPrecomputation() {
-
+    		
+    		// intialize words
+    		Iterable<String> vertices = graph.getAllVertices();
+    		words = new ArrayList<Word>();
+    		for(String str : vertices) {
+    			words.add(new Word(str));
+    		}
+    		boolean[] visited = new boolean[words.size()];
+    		
+    		// Find shortest from each word
+    		for(int i = 0; i < words.size(); i++) {
+    			Word word = words.get(i);
+    			
+    			// initialize word
+    			for(int j = 0; j < word.distance.size(); j++) {
+    				word.paths.add(new ArrayList<String>());
+    				word.distance.add(-1);
+    				visited[i] = false;
+    			}
+    			Queue<Integer> q = new LinkedList<Integer>();
+    			// Add the source vertex
+    			q.add(i);
+    			visited[i] = true;
+    			word.distance.set(i, 0);
+    			ArrayList<String> startingPath = new ArrayList<String>();
+    			startingPath.add(word.str);
+    			word.paths.set(i, startingPath);
+    			
+    			while(!q.isEmpty()) {
+    				int curIndex = q.poll();
+    				String curStr = words.get(curIndex).str;
+    				ArrayList<String> curPaths = word.paths.get(curIndex);
+    				Integer curDis = word.distance.get(curIndex);
+    				Iterable<String> neighbors = graph.getNeighbors(curStr);
+    				
+    				for(String neiStr : neighbors) {
+    					int neiIndex = getWordIndex(neiStr);
+    					if(!visited[neiIndex]) {
+    						word.distance.set(neiIndex, curDis + 1);
+    						ArrayList<String> neiPaths = new ArrayList<String>(curPaths);
+    						neiPaths.add(words.get(neiIndex).str);
+    						word.paths.set(neiIndex, neiPaths);
+    						visited[neiIndex] = true;
+    					}
+    				}
+    				
+    			}
+    			
+    			// resetting the base case
+    			for(int j = 0; j < words.size(); j++) {
+    				ArrayList<String> paths = word.paths.get(j);
+    				if(paths.size() == 1) {
+    					word.paths.set(j, new ArrayList<String>());
+    				} else if(paths.size() == 0) {
+    					word.paths.set(j, null);
+    				}
+    			}
+    			words.set(i, word);
+    		}
+    }
+    
+    private int getWordIndex(String str) {
+    		for(int i = 0; i < words.size(); i++) {
+    			if(words.get(i).str.equals(str)) {
+    				return i;
+    			}
+    		}
+    		return -1;
     }
 }
