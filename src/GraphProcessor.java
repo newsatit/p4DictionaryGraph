@@ -38,10 +38,13 @@ import java.util.stream.Stream;
 public class GraphProcessor {
 
 
+    /*
+     *  This class is used to store information associated with the words in the graph
+     */
     private class Word{
-        private String word;
-        private ArrayList<ArrayList<String>> paths;
-        private ArrayList<Integer> distance;
+        private String word;    //stores the String of the word
+        private ArrayList<ArrayList<String>> paths; //stores the shortest paths to all the other vertices
+        private ArrayList<Integer> distance;    //keeps track of the length of the shortest paths to other words
 
         Word(String word){
             this.word = word;
@@ -50,7 +53,8 @@ public class GraphProcessor {
         }
     }
 
-    ArrayList<Word> words;
+    ArrayList<Word> words;  //Strings in the graph are used to instantiate word objects and are stored here
+    
     /**
      * Graph which stores the dictionary words and their associated connections
      */
