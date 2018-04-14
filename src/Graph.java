@@ -61,7 +61,7 @@ public class Graph<E> implements GraphADT<E> {
             matrix.get(i).add(new Boolean(false));
         }
 
-        printMatrix();
+        //printMatrix();
 
         return vertex;
     }
