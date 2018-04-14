@@ -75,11 +75,11 @@ public class GraphProcessorTest {
 	 */
 	@Test
 	public void test01_populateGraph_AddsCorrectNumVertices() {
-		expectedInt=44;
+		expectedInt=7;
 		
 		actualInt= graphProc.populateGraph(nameFile);
 		if(expectedInt!=actualInt){
-			fail("expected: "+expected+ " actual: "+actual);
+			fail("expected: "+expectedInt+ " actual: "+actualInt);
 		}
 	}
 	

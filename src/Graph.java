@@ -1,3 +1,5 @@
+import com.sun.org.apache.xpath.internal.operations.Bool;
+
 import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,13 +40,28 @@ public class Graph<E> implements GraphADT<E> {
         if(isInGraph(vertex))
             return null;
 
+        if(vertices.size() == 0){
+            vertices.add(vertex);
+            matrix.add(new ArrayList<Boolean>());
+            matrix.get(0).add(new Boolean(false));
+            return vertex;
+        }
         //add the element to the graph
         vertices.add(vertex);
         //add a new row to the adjacency matrix and set the new values equal to false
         matrix.add(new ArrayList<Boolean>());
+
+        // adding existing columns to the new row
+        for(int j = 0; j < matrix.get(0).size(); j++){
+            matrix.get(matrix.size()-1).add(new Boolean(false));
+        }
+
+        // add new column to all rows
         for(int i = 0; i<matrix.size();i++){
             matrix.get(i).add(new Boolean(false));
         }
+
+        printMatrix();
 
         return vertex;
     }
@@ -63,11 +80,15 @@ public class Graph<E> implements GraphADT<E> {
 
         if(index == -1)
             return null;
-
+        //printMatrix();
         //remove from all places
         vertices.remove(index);
-        matrix.get(index).remove(index);
+        //matrix.get(index).remove(index);
+
         matrix.remove(index);
+        for(int i = 0; i<matrix.size(); i++){
+            matrix.get(i).remove(index);
+        }
 
         return vertex;
 
@@ -184,4 +205,13 @@ public class Graph<E> implements GraphADT<E> {
         return false;
     }
 
+    private void printMatrix(){
+        for(int i =0; i<matrix.size(); i++){
+            for(int j =0; j<matrix.get(i).size(); j++){
+                System.out.print(matrix.get(i).get(j) + " ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
 }
