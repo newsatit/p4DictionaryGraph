@@ -78,6 +78,7 @@ public class GraphProcessorTest {
 		expectedInt=7;
 		
 		actualInt= graphProc.populateGraph(nameFile);
+		graphProc.shortestPathPrecomputation();
 		if(expectedInt!=actualInt){
 			fail("expected: "+expectedInt+ " actual: "+actualInt);
 		}
@@ -90,8 +91,9 @@ public class GraphProcessorTest {
 	public void test02_populateGraph_WhenFileNotFound() {
 		expectedInt=-1;
 		actualInt= graphProc.populateGraph("Bad File Name");
+		graphProc.shortestPathPrecomputation();
 		if(expectedInt!=actualInt){
-			fail("expected: "+expected+ " actual: "+actual);
+			fail("expected: "+expectedInt+ " actual: "+actualInt);
 		}
 	}
 	
@@ -103,9 +105,9 @@ public class GraphProcessorTest {
 		expectedInt=0;
 		actualInt = 5;
 		actualInt= graphProc.populateGraph(emptyFile);
-		System.out.println(actualInt);
+		graphProc.shortestPathPrecomputation();
 		if(expectedInt!=actualInt){
-			fail("expected: "+expected+ " actual: "+actual);
+			fail("expected: "+expectedInt+ " actual: "+actualInt);
 		}
 	}
 	
@@ -122,6 +124,7 @@ public class GraphProcessorTest {
 		expectedList.add("WHEAT");
 		
 		graphProc.populateGraph(nameFile);
+		graphProc.shortestPathPrecomputation();
 		actualList = graphProc.getShortestPath("CAT", "WHEAT");
 		
 		
@@ -139,6 +142,7 @@ public class GraphProcessorTest {
 		expectedList = new ArrayList<String>();
 		
 		graphProc.populateGraph(nameFile);
+		graphProc.shortestPathPrecomputation();
 		actualList = graphProc.getShortestPath("CAT", "CAT");
 		
 		if(!expectedList.equals(actualList)){
@@ -155,6 +159,7 @@ public class GraphProcessorTest {
 		expectedList = null;
 		
 		graphProc.populateGraph(nameFile);
+		graphProc.shortestPathPrecomputation();
 		actualList = graphProc.getShortestPath("CAT", "ELEPHANT");
 		
 		if(actualList != null){
@@ -170,10 +175,10 @@ public class GraphProcessorTest {
 	public void test07_getShortestDistance_SmallFile() {
 		expectedInt =3;
 		graphProc.populateGraph(nameFile);
+		graphProc.shortestPathPrecomputation();
 		actualInt = graphProc.getShortestDistance("CAT", "WHEAT");
-		
 		if(expectedInt!=actualInt){
-			fail("expected: "+expected+ " actual: "+actual);
+			fail("expected: "+expectedInt+ " actual: "+actualInt);
 		}
 	}
 	
@@ -185,10 +190,11 @@ public class GraphProcessorTest {
 	public void test08_getShortestDistance_SameWord() {
 		expectedInt = -1;
 		graphProc.populateGraph(nameFile);
+		graphProc.shortestPathPrecomputation();
 		actualInt = graphProc.getShortestDistance("CAT", "CAT");
 		
 		if(expectedInt!=actualInt){
-			fail("expected: "+expected+ " actual: "+actual);
+			fail("expected: "+expectedInt+ " actual: "+actualInt);
 		}
 	}
 	
@@ -200,10 +206,11 @@ public class GraphProcessorTest {
 	public void test09_getShortestDistance_NoPath() {
 		expectedInt = -1;
 		graphProc.populateGraph(nameFile);
+		graphProc.shortestPathPrecomputation();
 		actualInt = graphProc.getShortestDistance("CAT", "ELEPHANT");
 		
 		if(expectedInt!=actualInt){
-			fail("expected: "+expected+ " actual: "+actual);
+			fail("expected: "+expectedInt+ " actual: "+actualInt);
 		}
 	}
 }

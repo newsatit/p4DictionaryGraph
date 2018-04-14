@@ -1,3 +1,15 @@
+/////////////////////////////////////////////////////////////////////////////
+// Semester:         CS400 Spring 2018
+// PROJECT:          X Team #4 Dictionary Graph
+// FILES:            GraphProcessor.java, GraphProcessorTest.java, Graph.java, GraphTest.java
+//					 WordProcessor.java, 
+//
+// USER:             Jake Rymsza, Eden Schuette, Ben Schulman, Andrew Schaefer, Dawanit Satitsumpun
+//
+// Instructor:       Deb Deppeler (deppeler@cs.wisc.edu)
+// Bugs:             no known bugs
+//
+//////////////////////////// 80 columns wide //////////////////////////////////
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -38,7 +50,7 @@ import java.util.stream.Stream;
  * 
  */
 public class GraphProcessor {
-
+	
     /*
      *  This class is used to store information associated with the words in the graph
      */
@@ -46,7 +58,7 @@ public class GraphProcessor {
         private String str;    //stores the String of the word
         private ArrayList<ArrayList<String>> paths; //stores the shortest paths to all the other vertices
         private ArrayList<Integer> distance;    //keeps track of the length of the shortest paths to other words
-
+        
         Word(String str){
             this.str = str;
             this.paths = new ArrayList<ArrayList<String>>();
@@ -94,23 +106,22 @@ public class GraphProcessor {
 
     		// get rid of duplicates
     		wordStream = wordStream.distinct();
-            List<String> s = wordStream.collect(Collectors.toList());
+        List<String> s = wordStream.collect(Collectors.toList());
     		// add each word to graph
     		//wordStream.forEach(x -> graph.addVertex(x));
 
 
-            for(int i =0; i<s.size();i++)
-                graph.addVertex(s.get(i));
+        for(int i =0; i<s.size();i++)
+            graph.addVertex(s.get(i));
 
     		// add edges where necessary
     		for(int i = 0; i < s.size(); i++){
     		    for(int j =i; j<s.size(); j++){
     		        if(WordProcessor.isAdjacent(s.get(i), s.get(j)))
     		            graph.addEdge(s.get(i),s.get(j));
-                }
-            }
-
-            return s.size();
+    		    }
+    		}
+    		return s.size();
     }
 
     
@@ -126,6 +137,9 @@ public class GraphProcessor {
      *             kit
      *  shortest path between cat and wheat is the following list of words:
      *     [cat, hat, heat, wheat]
+     *
+     * If word1 = word2, List will be empty. 
+     * Both the arguments will always be present in the graph.
      * 
      * @param word1 first word
      * @param word2 second word
@@ -134,7 +148,6 @@ public class GraphProcessor {
     public List<String> getShortestPath(String word1, String word2) {
         int index1 = getWordIndex(word1);
         int index2 = getWordIndex(word2);
-        
         return (words.get(index1)).paths.get(index2);
     }
     
@@ -150,6 +163,9 @@ public class GraphProcessor {
      *             kit
      *  distance of the shortest path between cat and wheat, [cat, hat, heat, wheat]
      *   = 3 (the number of edges in the shortest path)
+     *
+     * Distance = -1 if no path found between words (true also for word1=word2)
+     * Both the arguments will always be present in the graph.
      * 
      * @param word1 first word
      * @param word2 second word
@@ -174,6 +190,7 @@ public class GraphProcessor {
     		for(String str : vertices) {
     			words.add(new Word(str));
     		}
+    		//System.out.println(words.toString());
     		boolean[] visited = new boolean[words.size()];
     		
     		// Find shortest from each word
@@ -210,14 +227,13 @@ public class GraphProcessor {
     					if(!visited[adjIndex]) {
     						distance.set(adjIndex, curDis + 1);
     						ArrayList<String> adjPaths = new ArrayList<String>(curPaths);
+    						q.add(adjIndex);
     						adjPaths.add(words.get(adjIndex).str);
     						paths.set(adjIndex, adjPaths);
     						visited[adjIndex] = true;
     					}
-    				}
-    				
+    				}   				
     			}
-    			
     			// resetting the base case
     			for(int j = 0; j < words.size(); j++) {
     				ArrayList<String> newPath = paths.get(j);
@@ -226,6 +242,10 @@ public class GraphProcessor {
     				} else if(newPath.size() == 0) {
     					paths.set(j, null);
     				}
+    				
+    				if(distance.get(j) == 0) {
+    					distance.set(j, -1);
+    				}
     			}
     			word.paths = paths;
     			word.distance = distance;
@@ -233,6 +253,11 @@ public class GraphProcessor {
     		}
     }
     
+    /**
+     * Get the index of the word in words ArrayList
+     * @param str the word whose index what to be found
+     * @return the index of the word, return -1 if the word is not in words
+     */
     private int getWordIndex(String str) {
     		for(int i = 0; i < words.size(); i++) {
     			if(words.get(i).str.equals(str)) {

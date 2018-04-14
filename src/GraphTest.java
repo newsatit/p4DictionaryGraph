@@ -1,3 +1,15 @@
+/////////////////////////////////////////////////////////////////////////////
+// Semester:         CS400 Spring 2018
+// PROJECT:          X Team #4 Dictionary Graph
+// FILES:            GraphProcessor.java, GraphProcessorTest.java, Graph.java, GraphTest.java
+//					 WordProcessor.java, 
+//
+// USER:             Jake Rymsza, Eden Schuette, Ben Schulman, Andrew Schaefer, Dawanit Satitsumpun
+//
+// Instructor:       Deb Deppeler (deppeler@cs.wisc.edu)
+// Bugs:             no known bugs
+//
+//////////////////////////// 80 columns wide //////////////////////////////////
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
